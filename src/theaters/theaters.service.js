@@ -1,6 +1,10 @@
 const db = require("../db/connection");
 const reduceProperties = require("../utils/reduce-properties");
 
+/**
+ * Reduces movies data to only the properties needed for the theaters view.
+ * Joins the movies data with the theater data on theater_id.
+ */
 const reduceMovies = reduceProperties("theater_id", {
   movie_id: ["movies", null, "movie_id"],
   title: ["movies", null, "title"],
@@ -10,6 +14,11 @@ const reduceMovies = reduceProperties("theater_id", {
   image_url: ["movies", null, "image_url"],
 });
 
+/**
+ * Retrieves all theaters with their associated movies, joining the movies, movies_theaters, and theaters tables.
+ * Reduces the joined data to contain only needed movie properties.
+ * @returns {Promise} A promise that resolves to the reduced theater and movie data.
+ */
 async function list() {
   return db("theaters")
     .join(
